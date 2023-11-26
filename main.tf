@@ -22,12 +22,12 @@ module "storage" {
   resource_group_name = azurerm_resource_group.default.name
 }
 
-# module "eventhub" {
-#   source              = "./modules/eventhub"
-#   workload            = local.workload
-#   resource_group_name = azurerm_resource_group.default.name
-#   location            = azurerm_resource_group.default.location
-# }
+module "servicebus" {
+  source              = "./modules/servicebus"
+  workload            = local.workload
+  resource_group_name = azurerm_resource_group.default.name
+  location            = azurerm_resource_group.default.location
+}
 
 module "eventgrid" {
   source              = "./modules/eventgrid"

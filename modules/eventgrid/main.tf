@@ -9,3 +9,17 @@ resource "azurerm_eventgrid_system_topic" "storage" {
     type = "SystemAssigned"
   }
 }
+
+# resource "azurerm_eventgrid_system_topic_event_subscription" "example" {
+#   name                = "example-event-subscription"
+#   system_topic        = azurerm_eventgrid_system_topic.example.name
+#   resource_group_name = azurerm_resource_group.example.name
+
+#   # Recommended
+#   event_delivery_schema = "CloudEventSchemaV1_0"
+
+#   storage_queue_endpoint {
+#     storage_account_id = azurerm_storage_account.example.id
+#     queue_name         = azurerm_storage_queue.example.name
+#   }
+# }
