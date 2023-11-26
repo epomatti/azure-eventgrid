@@ -1,5 +1,9 @@
 # Azure Event Grid
 
+Subscribing to Azure system events with Event Grid.
+
+<img src=".assets/eventgrid.png" />
+
 Create the resource:
 
 ```sh

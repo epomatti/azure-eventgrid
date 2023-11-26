@@ -17,14 +17,18 @@ resource "azurerm_role_assignment" "servicebus_namespace_permissions" {
 }
 
 resource "azurerm_eventgrid_system_topic_event_subscription" "storage_to_servicebus" {
-  name                = "storage-event-subscription"
-  system_topic        = azurerm_eventgrid_system_topic.storage.name
-  resource_group_name = var.resource_group_name
+  name                          = "storage-event-subscription"
+  system_topic                  = azurerm_eventgrid_system_topic.storage.name
+  resource_group_name           = var.resource_group_name
+  service_bus_queue_endpoint_id = var.service_bus_queue_endpoint_id
 
   # Recommended by Microsoft
   event_delivery_schema = "CloudEventSchemaV1_0"
 
-  service_bus_queue_endpoint_id = var.service_bus_queue_endpoint_id
+  included_event_types = [
+    "Microsoft.Storage.BlobCreated",
+    "Microsoft.Storage.BlobDeleted",
+  ]
 
   # Wait for permissions to be granted to the System-Assigned Identity
   depends_on = [azurerm_role_assignment.servicebus_namespace_permissions]
