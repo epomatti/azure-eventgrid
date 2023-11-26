@@ -30,8 +30,10 @@ module "servicebus" {
 }
 
 module "eventgrid" {
-  source              = "./modules/eventgrid"
-  resource_group_name = azurerm_resource_group.default.name
-  location            = azurerm_resource_group.default.location
-  storage_id          = module.storage.storage_id
+  source                        = "./modules/eventgrid"
+  resource_group_name           = azurerm_resource_group.default.name
+  location                      = azurerm_resource_group.default.location
+  storage_id                    = module.storage.storage_id
+  service_bus_namespace_id      = module.servicebus.servicebus_namespace_id
+  service_bus_queue_endpoint_id = module.servicebus.servicebus_queue_id
 }

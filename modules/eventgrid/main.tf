@@ -10,16 +10,22 @@ resource "azurerm_eventgrid_system_topic" "storage" {
   }
 }
 
-# resource "azurerm_eventgrid_system_topic_event_subscription" "example" {
-#   name                = "example-event-subscription"
-#   system_topic        = azurerm_eventgrid_system_topic.example.name
-#   resource_group_name = azurerm_resource_group.example.name
+resource "azurerm_role_assignment" "servicebus_namespace_permissions" {
+  scope                = var.service_bus_namespace_id
+  role_definition_name = "Azure Service Bus Data Sender"
+  principal_id         = azurerm_eventgrid_system_topic.storage.identity[0].principal_id
+}
 
-#   # Recommended
-#   event_delivery_schema = "CloudEventSchemaV1_0"
+resource "azurerm_eventgrid_system_topic_event_subscription" "storage_to_servicebus" {
+  name                = "storage-event-subscription"
+  system_topic        = azurerm_eventgrid_system_topic.storage.name
+  resource_group_name = var.resource_group_name
 
-#   storage_queue_endpoint {
-#     storage_account_id = azurerm_storage_account.example.id
-#     queue_name         = azurerm_storage_queue.example.name
-#   }
-# }
+  # Recommended by Microsoft
+  event_delivery_schema = "CloudEventSchemaV1_0"
+
+  service_bus_queue_endpoint_id = var.service_bus_queue_endpoint_id
+
+  # Wait for permissions to be granted to the System-Assigned Identity
+  depends_on = [azurerm_role_assignment.servicebus_namespace_permissions]
+}

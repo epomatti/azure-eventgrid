@@ -9,3 +9,11 @@ variable "resource_group_name" {
 variable "location" {
   type = string
 }
+
+variable "service_bus_namespace_id" {
+  type = string
+}
+
+variable "service_bus_queue_endpoint_id" {
+  type = string
+}
